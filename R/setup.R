@@ -49,13 +49,18 @@ pbSetup <- function(apikey, conffile) {
 
     if (!length(pdgd$devices)) stop("no devices found for ", apikey, call.=FALSE)
 
-    devices <- names <- rep(NA_character_, nrow(pdgd$devices)) # default to NA
-    ind <- with(pdgd$devices, active & pushable)
-    devices[ind] <- pdgd$devices[ind, "iden"]
-    names[ind]   <- pdgd$devices[ind, "nickname"]
+    devices <- names <- rep(NA_character_, length(pdgd$devices)) # default to NA
+    #ind <- with(pdgd$devices, active & pushable)
+    #devices[ind] <- pdgd$devices[ind, "iden"]
+    #names[ind]   <- pdgd$devices[ind, "nickname"]
+    ind <- vapply(pdgd$devices, function(x){x$active & x$pushable},TRUE)*(1:length(pdgd$devices))
+    ind <- ind[ind>0]
+    devices[ind] <- vapply(pdgd$devices[ind], function(x){x$iden},"")
+    names[ind]   <- vapply(pdgd$devices[ind], function(x){x$nickname},"")
 
     devices <- na.omit(devices)
     names <- na.omit(names)
+
 
     for (i in seq_along(names)) {
         print(paste0(i,". ",names[i]))
@@ -66,7 +71,8 @@ pbSetup <- function(apikey, conffile) {
     if (defdev %in% as.character(seq_along(names)))
         reslist$defaultdevice <- names[as.integer(defdev)]
 
-    json <- toJSON(reslist, auto_unbox = TRUE)
+    #json <- toJSON(reslist, auto_unbox = TRUE)
+    json <- toJSON(reslist)
 
     f <- file(conffile,open = "w")
     cat(json,file = f)

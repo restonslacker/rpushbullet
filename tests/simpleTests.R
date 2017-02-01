@@ -25,8 +25,8 @@ if (Sys.getenv("Run_RPushbullet_Tests")=="yes") {
     RPushbullet:::.getDevices()
 
     ## Show the list of devices registered to the key
-    #require(RJSONIO)
-    require(jsonlite)
+    require(RJSONIO)
+    #require(jsonlite)
     str(pbGetDevices())
 
     ## Test destinations

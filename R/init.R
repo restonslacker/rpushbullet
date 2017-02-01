@@ -21,7 +21,8 @@
 .pkgenv <- new.env(parent=emptyenv())
 
 .parseResourceFile <- function(dotfile="~/.rpushbullet.json") {
-    pb <- fromJSON(dotfile, simplifyVector = FALSE)
+    pb <- fromJSON(dotfile)
+    #pb <- fromJSON(dotfile, simplifyVector = FALSE)
     .pkgenv[["pb"]] <- pb
     if (is.null(pb[["key"]])) {
         warning("Field 'key' is either empty or missing: ", dotfile, call.=FALSE, immediate.=TRUE)

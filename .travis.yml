@@ -11,7 +11,8 @@ before_install:
   - ./run.sh bootstrap
 
 install:
-  - ./run.sh install_aptget r-cran-curl r-cran-jsonlite
+  - ./travis-tool.sh install_r RJSONIO
+  - ./run.sh install_aptget r-cran-curl
 
 script:
   - ./run.sh run_tests
